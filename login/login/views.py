@@ -25,11 +25,13 @@ def registration(request):
     email = jsonobj.get('email')
     password = jsonobj.get('password')
 
-    login = UserLoginForm.objects.create(username=username,mob_no=mob_no,email=email,password=password)
-    login.save()
+    print username,mob_no,email,password
 
-    return HttpResponse(json.dumps({'validation':"resgistration is successfully",'status':True}), content_type="application/json")
+    
+    user_reg = UserLoginForm.objects.create(username=username,mob_no=mob_no,email=email,password=password)
+    user_reg.save()
 
+    return render_to_response('html_templates/home.htm l')
 
 
 
@@ -42,33 +44,47 @@ def loginme(request):
     username=jsonobj.get("username")
     password=jsonobj.get("password")
 
+
+
     if username == None:
         return HttpResponse(json.dumps({'validation':'Enter user name' , "status": False}), content_type="application/json")
     elif password == None:
         return HttpResponse(json.dumps({'validation':'Enter password first' , "status": False}), content_type="application/json")
 
 
-    user = authenticate(username=username,password=password)
-    
-    if not user:
-        return HttpResponse(json.dumps({'validation':'Invalid user', "status": False}), content_type="application/json")
-    if not user.is_active:
-        return HttpResponse(json.dumps({'validation':'The password is valid, but the account has been disabled!', "status":False}), content_type="application/json")
+    # user = UserLoginForm.objects.get(username=username,password=password)
+    # user = authenticate(username=username,password=password)
+    user_detail = UserLoginForm.objects.all()
+    print user_detail
 
-    django_login(request,user)
-    return HttpResponse(json.dumps({'validation':'user login succefully!', "status":False}), content_type="application/json")
+    for user in user_detail:
+        print user
+        if username == user.username or username == user.email:
+            queryset = show_user(user)
+            return render_to_response('html_templates/show_user.html',queryset)
+    return HttpResponse(json.dumps({'validation':'Invalid user', "status": False}), content_type="application/json")
 
 
-def show_user(request):
 
-    all_user = UserLoginForm.objects.all()
+    # if not user:
+    #     return HttpResponse(json.dumps({'validation':'Invalid user', "status": False}), content_type="application/json")
+    # else:
+    #     queryset = show_user(user)
+    #     return render_to_response('html_templates/show_user.html',queryset)
 
-    user_list = []
 
-    for user in all_user:
-        user_list.append({"user":user.username,"mob_no":user.mob_no,"email":user.email,"password":user.password})
+def show_user(user):
 
-    user_dict = {}
-    user_dict["user_list"] = user_list
-    return render_to_response('html_templates/show_user.html',user_dict)
+    user_info = UserLoginForm.objects.get(username=user)
+
+    username = user_info.username
+    email = user_info.email
+    mob_no =user_info.mob_no
+
+    queryset = { "user":username,
+                    "email":email,
+                        "mob_no":mob_no
+            }
+
+    return queryset
 

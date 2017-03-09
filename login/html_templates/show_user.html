@@ -2,19 +2,16 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="/static/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" href="/static/main.css">
+		
 		<title>show user info</title>
 	</head>
 	<body>
 	<center>
-		<legend>user:</legend><br>
+		<h1>Hello {{user}}</h1><br>
+		<h1>mob_no {{mob_no}}</h1><br>
+		<h1>email {{email}}</h1><br>
 
-		{% for item in user_list %}
-		{{ item.user }}
-		{{ item.mob_no}}</br>
 		
-		{% endfor %}
-	
 	
 	<button class="btn btn-success" type="submit"><a href="/home/page/">Logout</a></button>
 
