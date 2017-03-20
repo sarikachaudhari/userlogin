@@ -16,8 +16,4 @@ class UserLoginForm(models.Model):
  	def __unicode__(self):
 		return str(self.username) 
 
-class UserDetail(models.Model):
-	username =models.ForeignKey(UserLoginForm)
 
-	def __unicode__(self):
-		return str(self.username) 
