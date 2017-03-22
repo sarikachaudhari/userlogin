@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^login/view/$',login_view),
     url(r'^registration/page/$', registration_page),
     url(r'^show/user/$',show_user),
+    url(r'^logout/$',logout),
     
   
 

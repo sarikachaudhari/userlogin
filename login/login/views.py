@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate
 from django.shortcuts import render_to_response
 from django.contrib.auth import login as django_login
 from django.contrib.auth.models import User
+from django.contrib.auth import logout
 import json
 # Create your views here.
 
@@ -67,15 +68,6 @@ def loginme(request):
     # else:
     user_detail = UserLoginForm.objects.all()
     for user__ in user_detail:
-        print '----------------------------------------------'
-        print '@@@@@@ email' ,user__.email 
-        print '%%%%%% mob_no' , type(user__.mob_no)
-        print '###### username' , type(user__.username)
-
-        print username
-
-
-        
         if str(user__.mob_no) == username or user__.email == username:
             user_st = user__.username
             user=  authenticate(username=user_st,password=password)
@@ -90,18 +82,7 @@ def loginme(request):
     queryset = show_user(user)
     return render_to_response('html_templates/show_user.html',queryset)
 
-    # if not user:
-    #     return HttpResponse(json.dumps({'validation':'Invalid user', "status": False}), content_type="application/json")
-    # if not user.is_active:
-    #     return HttpResponse(json.dumps({'validation':'The password is valid, but the account has been disabled!', "status":False}), content_type="application/json")
-
-    # queryset = show_user(user)
-    # return render_to_response('html_templates/show_user.html',queryset)
-    # django_login(request,user)
-    # return HttpResponse(json.dumps({'validation':'Login successfully', "status": True}), content_type="application/json")
-
-
-
+    
 
 def show_user(user):
 
@@ -118,3 +99,5 @@ def show_user(user):
 
     return queryset
 
+def logout(request):
+    return render_to_response('html_templates/home.html')
